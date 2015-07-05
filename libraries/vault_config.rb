@@ -34,6 +34,8 @@ class Chef::Resource::VaultConfig < Chef::Resource
   attribute(:statsd_addr, kind_of: String)
   attribute(:backend_type, default: 'inmem', equal_to: %w{consul inmem zookeeper file})
   attribute(:backend_options, option_collector: true)
+  attribute(:listener_type, default: 'tcp', equal_to: %w{tcp})
+  attribute(:listener_options, option_collector: true)
 
   def tls?
     !tls_disable
@@ -46,7 +48,9 @@ class Chef::Resource::VaultConfig < Chef::Resource
     for_keeps = %i{listen_address tls_disable tls_cert_file tls_key_file disable_mlock statsite_addr statsd_addr}
     config = to_hash.keep_if do |k, v|
       for_keeps.include?(k.to_sym)
-    end.merge('backend' => { backend_type => (backend_options || {}) })
+    end.merge(
+      'backend' =>  { backend_type =>  (backend_options  || {}) },
+      'listener' => { listener_type => (listener_options || {}) })
     JSON.pretty_generate(config, quirks_mode: true)
   end
 
