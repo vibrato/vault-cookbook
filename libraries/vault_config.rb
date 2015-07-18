@@ -45,7 +45,7 @@ class Chef::Resource::VaultConfig < Chef::Resource
   # Vault service's configuration format.
   # @see https://vaultproject.io/docs/config/index.html
   def to_json
-    for_keeps = %i{listen_address tls_disable tls_cert_file tls_key_file disable_mlock statsite_addr statsd_addr}
+    for_keeps = %i{disable_mlock statsite_addr statsd_addr}
     config = to_hash.keep_if do |k, v|
       for_keeps.include?(k.to_sym)
     end.merge(
