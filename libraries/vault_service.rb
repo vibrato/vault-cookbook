@@ -117,6 +117,10 @@ class Chef::Provider::VaultService < Chef::Provider
           action :install
         end
 
+        execute "allow vault mlock" do
+          command "setcap cap_ipc_lock=+ep /srv/vault/current/vault"
+        end
+
         directory ::File.join(new_resource.install_path, 'bin')
 
         link ::File.join(new_resource.install_path, 'bin', 'vault') do
