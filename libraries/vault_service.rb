@@ -59,7 +59,7 @@ class Chef::Resource::VaultService < Chef::Resource
   attribute(:source_url, kind_of: String)
 
   def command
-    "/usr/local/bin/vault server -config=#{config_path}"
+    "/srv/vault/current/vault server -config=#{config_path}"
   end
 
   def binary_checksum
