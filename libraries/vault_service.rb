@@ -95,6 +95,10 @@ class Chef::Provider::VaultService < Chef::Provider
           remote_checksum new_resource.binary_checksum
         end
 
+        execute "allow vault mlock" do
+          command "setcap cap_ipc_lock=+ep /srv/vault/current/vault"
+        end
+
         link '/usr/local/bin/vault' do
           to ::File.join(artifact.current_path, 'vault')
         end
